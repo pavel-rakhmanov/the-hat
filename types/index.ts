@@ -17,9 +17,5 @@ export type Team = {
 
 export type Room = User & {
   users: User[]
-  teams: Team[]
-  words: Word[]
-} & {
   usersLimit: number
-  timePerRound: number
 }

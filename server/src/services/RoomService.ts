@@ -64,26 +64,17 @@ const defaultRooms: Room[] = [
   {
     id: 'r1',
     users: [],
-    teams: [],
-    timePerRound: 6000,
     usersLimit: 4,
-    words: []
   },
   {
     id: 'r2',
     users: [],
-    teams: [],
-    timePerRound: 6000,
     usersLimit: 0,
-    words: []
   },
   {
     id: 'r3',
     users: [],
-    teams: [],
-    timePerRound: 6000,
     usersLimit: 6,
-    words: []
   }
 ];
 

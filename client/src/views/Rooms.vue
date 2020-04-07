@@ -148,14 +148,13 @@ export default {
       }
     },
     addRoom() {
-      const room = {
+      // TODO: создание комнаты пользователем а не мок
+      const room: Room = {
         id: this.rooms.length.toString(),
         users: [],
-        teams: [],
-        timePerRound: 6000,
         usersLimit: 4,
-        words: [],
       };
+
       this.$socket.emit(SocketEmits.AddRoom, room);
     },
     goToRoom(room: Room) {
