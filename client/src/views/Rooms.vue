@@ -14,7 +14,7 @@
         no results
       </template>
       <template v-slot:header>
-          <v-toolbar class="mb-3">
+          <v-toolbar class="mb-3"  >
             <v-text-field
               v-model="search"
               clearable
@@ -61,15 +61,33 @@
               lg="3"
             >
               <v-card
+                :elevation="5"
+                v-ripple
                 :disabled="room.users.length === room.usersLimit"
                 @click.stop="() => { goToRoom(room) }"
                 style="height: 100%"
               >
-                <v-card-title class="primary--text">
-                  {{ room.name }}
+                <v-card-title>
+                  <span class="primary--text">
+                    {{ room.name }}
+                  </span>
+                  <v-spacer/>
+                  <span class="secondary--text">
+                    {{ room.users.length }}/{{ room.usersLimit }}
+                  </span>
                 </v-card-title>
                 <v-card-text>
-                  {{ JSON.stringify(room, null, 2 )}}
+                  <div
+                    v-for="(user, userIndex) in room.users"
+                    :key="userIndex"
+                    class="flex"
+                    :class="{
+                      'mb-3': userIndex < room.users.length - 1
+                    }"
+                  >
+                    <Avatar :src="user.avatar" />
+                    <span class="ml-3">{{ user.name }} </span>
+                  </div>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -81,12 +99,16 @@
 
 <script lang="ts">
 import { PAGE_NAMES } from '@/router';
+import Avatar from '@/components/Avatar.vue';
 
 import { Room } from '../../../types';
 import { SocketEmits } from '../../../enums';
 
 export default {
   name: 'rooms',
+  components: {
+    Avatar,
+  },
   sockets: {
     [SocketEmits.Rooms](rooms: Room[]) {
       // @ts-ignore
@@ -137,12 +159,14 @@ export default {
       this.$socket.emit(SocketEmits.AddRoom, room);
     },
     goToRoom(room: Room) {
-      this.$router.push({
-        name: PAGE_NAMES.Room,
-        params: {
-          roomId: room.id,
-        },
-      });
+      setTimeout(() => {
+        this.$router.push({
+          name: PAGE_NAMES.Room,
+          params: {
+            roomId: room.id,
+          },
+        });
+      }, 150)
     },
   },
   created() {
