@@ -1,13 +1,11 @@
 <template>
   <v-app>
     <AppBar />
-
     <v-content>
-      <v-container fluid>
+      <v-container fluid style="height: 100%;">
         <router-view />
       </v-container>
     </v-content>
-
     <Footer />
   </v-app>
 </template>
@@ -26,17 +24,6 @@ export default {
     connect() {
       console.log('socket connected');
     },
-    customEmit(data) {
-      console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)');
-    },
-  },
-  methods: {
-    clickButton() {
-      this.$socket.emit('test', new Date().toISOString());
-    },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-</style>
