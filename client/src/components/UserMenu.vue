@@ -9,43 +9,66 @@
   >
     <template v-slot:activator="{ on }">
       <a v-on="on">
-       <Avatar />
+       <Avatar :src="user.avatar" />
       </a>
     </template>
     <v-list>
       <v-list-item class="flex align-center">
-        name:
         <v-text-field
           dence
-          :value="userName"
+          :value="user.userName"
           @change="changeUserName"
           :hide-details="true"
           class="ma-0 ml-2 pa-0"
+          label="name"
         />
       </v-list-item>
-      <v-list-item @click.stop="changeIcon">
-        change img: <v-icon>publish</v-icon>
+      <v-list-item>
+        <v-file-input
+          prepend-icon="portrait"
+          accept="image/*"
+          label="avatar"
+          @change="changeAvatar"
+        />
       </v-list-item>
     </v-list>
   </v-menu>
 </template>
 
-<script>
+<script lang="ts">
 import Avatar from './Avatar.vue';
+
+import { User } from '../../../types';
+import { SocketEmits, RestEndpoints } from '../../../enums';
 
 export default {
   name: 'user-menu',
   components: {
     Avatar,
   },
+  sockets: {
+    [SocketEmits.User](user: User) {
+      // @ts-ignore
+      this.user = user;
+    },
+  },
   data() {
     return {
-      userName: '',
+      user: {},
       isMenuOpen: false,
     };
   },
   methods: {
-    changeIcon() {
+    changeAvatar(photo) {
+      const req = new XMLHttpRequest();
+      const formData = new FormData();
+
+      formData.append('photo', photo);
+      formData.append('userId', this.$socket.id);
+
+      req.open('POST', `${process.env.VUE_APP_API_URL}/${RestEndpoints.UploadImage}`);
+      req.send(formData);
+
       this.isMenuOpen = false;
     },
     changeUserName(name) {
@@ -55,6 +78,6 @@ export default {
         this.name = name;
       }
     },
-  },
+  }
 };
 </script>

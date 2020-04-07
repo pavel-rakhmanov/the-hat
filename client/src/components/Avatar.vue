@@ -1,19 +1,33 @@
 <template>
   <v-avatar
     size="48"
-    class="primary"
+    class="secondary"
     style="border: 2px solid;"
   >
-    <img :src="imgUrl">
+    <img
+      v-if="src"
+      :src="imgUrl"
+    >
   </v-avatar>
 </template>
 
 <script>
 export default {
   name: 'avatar',
+  props: {
+    src: String,
+  },
   computed: {
     imgUrl() {
-      return 'https://cdn.vuetifyjs.com/images/john.jpg';
+      const { src } = this;
+
+      if (!src) return '';
+
+      if (src.includes('http')) {
+        return src;
+      }
+
+      return `${process.env.VUE_APP_API_URL}/${this.src}`;
     },
   },
 };
