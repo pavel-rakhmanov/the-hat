@@ -42,21 +42,13 @@ export function createIo(server: Server): socketIo.Server {
     socket.on(SocketEmits.EnterRoom, (roomId: Room['id']) => {
       if (!user?.socket) return;
 
-      const room = RoomsService.getRoom(roomId);
-
-      if (room) room.addUser(user);
-
-      console.log(`User with id='${user.id}' namespaces: [${user.namespaces}]`);
+      RoomsService.addRoomUser(roomId, user);
     });
 
     socket.on(SocketEmits.LeaveRoom, (roomId: Room['id']) => {
       if (!user?.socket) return;
 
-      const room = RoomsService.getRoom(roomId);
-
-      if (room) room.removeUser(user);
-
-      console.log(`User with id='${user.id}' namespaces: [${user.namespaces}]`);
+      RoomsService.removeRoomUser(roomId, user);
     });
 
     socket.on('disconnect', () => {

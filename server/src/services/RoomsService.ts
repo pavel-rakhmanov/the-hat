@@ -1,6 +1,6 @@
 import { Room as BaseRoom } from '@/types';
 import { SocketEmits, SocketNamespace } from '@/enums';
-import { Room } from '@/classes';
+import { Room, User } from '@/classes';
 import { io } from '@/index';
 
 const ROOMS_MAP = new Map<Room['id'], Room>();
@@ -13,8 +13,22 @@ export function getBaseRooms(): BaseRoom[] {
   return getRooms().map((room) => room.baseRoom);
 }
 
-export function updateRooms(): void {
-  io && io.in(SocketNamespace.Rooms).emit(SocketEmits.Rooms, getBaseRooms());
+function updateRoom(room: Room): void {
+  const { id, baseRoom } = room;
+
+  room.backendUsers.forEach((user) => {
+    const { socket } = user;
+
+    if (socket) socket.in(id).emit(SocketEmits.Room, baseRoom);
+  });
+
+  updateRooms();
+}
+
+function updateRooms(): void {
+  if (!io) return;
+
+  io.in(SocketNamespace.Rooms).emit(SocketEmits.Rooms, getBaseRooms());
 }
 
 export function addRoom(roomInfo: BaseRoom): Room {
@@ -40,6 +54,30 @@ export function getBaseRoom(roomId: Room['id']): BaseRoom | undefined {
 export function removeRoom(roomId: Room['id']): void {
   ROOMS_MAP.delete(roomId);
   updateRooms();
+}
+
+export function addRoomUser(roomId: Room['id'], user: User): void {
+  const room = getRoom(roomId);
+
+  if (!room) return;
+
+  room.backendUsers.push(user);
+
+  console.log(`User with id='${user.id}' enter to the room with id='${roomId}'`);
+
+  updateRoom(room);
+}
+
+export function removeRoomUser(roomId: Room['id'], user: User): void {
+  const room = getRoom(roomId);
+
+  if (!room) return;
+
+  room.backendUsers = room.backendUsers.filter(({ id }) => id !== user.id);
+
+  console.log(`User with id='${user.id}' leaving the room with id='${roomId}'`);
+
+  updateRoom(room);
 }
 
 (function periodicRoomsCleaning(): void {
