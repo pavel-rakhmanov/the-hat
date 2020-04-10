@@ -5,36 +5,42 @@ import { getRoom, updateRooms } from '@/services/RoomsService';
 import { uuidShort } from '@/utils';
 
 export class Room implements BaseRoom {
-  constructor(roomInfo: BaseRoom) {
+  constructor(roomInfo: Omit<BaseRoom, 'id' | 'users'>) {
     let roomId = uuidShort();
 
     while(getRoom(roomId)) {
       roomId = uuidShort();
     }
 
-    this._baseRoom = {
-      name: `room ${roomId}`,
-      avatar: `public/img/default-avatar.png`,
-      ...roomInfo,
-      id: roomId
-    }
+    this.id = roomId;
+    this.name = roomInfo.name || `room ${roomId}`;
+    this.avatar = roomInfo.avatar || `public/img/default-avatar.png`;
+    this.usersLimit = roomInfo.usersLimit;
   }
 
-  private _baseRoom: BaseRoom;
+  public readonly id: NonNullable<BaseRoom['id']>;
 
-  public get baseRoom() { return this._baseRoom; }
-  public get id() { return this.baseRoom.id }
-  public get name() { return this.baseRoom.name }
-  public get avatar() { return this.baseRoom.avatar }
-  public get users() { return this.baseRoom.users }
-  public get usersLimit() { return this.baseRoom.usersLimit }
+  public readonly name: NonNullable<BaseRoom['name']>;
 
-  private _backendUsers: User[] = [];
-  private get backendUsers() { return this._backendUsers; };
-  private set backendUsers(users) {
-    this._backendUsers = users;
-    this._baseRoom.users = users.map(user => user.baseUser)
+  public readonly avatar: NonNullable<BaseRoom['avatar']>;
+
+  public readonly usersLimit : NonNullable<BaseRoom['usersLimit']>;
+
+  public get users(): BaseRoom['users'] {
+    return this.backendUsers.map(user => user.baseUser);
   }
+
+  public get baseRoom(): BaseRoom {
+    return {
+      id: this.id,
+      name: this.name,
+      avatar: this.avatar,
+      users: this.users,
+      usersLimit: this.usersLimit
+    };
+  }
+
+  private backendUsers: User[] = [];
 
   public addUser(user: User) {
     if (this.backendUsers.length >= this.usersLimit) return;
