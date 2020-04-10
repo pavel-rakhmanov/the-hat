@@ -5,14 +5,26 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "postinstall": "concurrently npm:postinstall:*",
+    "postinstall": "npm-run-all postinstall:*",
     "postinstall:server": "cd ./server && npm install",
     "postinstall:client": "cd ./client && npm install",
     "start": "concurrently npm:start:*",
     "start:server": "cd ./server && npm run start",
-    "start:client": "cd ./client && npm run serve"
+    "start:client": "cd ./client && npm run serve",
+    "lint": "npm-run-all \"lint:* -- {1}\"",
+    "lint-fix": "npm run lint -- -- --fix",
+    "lint:root": "eslint ./ --no-error-on-unmatched-pattern --ext .js,.ts",
+    "lint:server": "cd ./server && npm run lint --"
   },
-  "dependencies": {
-    "concurrently": "5.1.0"
-  }
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "2.27.0",
+    "concurrently": "5.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "npm-run-all": "4.1.5",
+    "typescript": "3.8.3"
+  },
+  "dependencies": {}
 }

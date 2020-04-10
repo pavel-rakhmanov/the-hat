@@ -10,46 +10,42 @@
       </div>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-      <p class="mt-5 mb-1 mr-1">{{ user.name }} </p>
-      <Avatar :src="user.avatar"/>
+    <template v-if="user">
+      <User :user="user" />
+      <v-btn icon text @click="logOut" class="ml-3">
+        <v-icon>exit_to_app</v-icon>
+      </v-btn>
+    </template>
   </v-app-bar>
 </template>
 
 <script lang="ts">
-import { PAGE_NAMES, PAGE_NAMES_TRANSLATIONS } from '@/router';
-import Avatar from '@/components/Avatar.vue';
-
-import { User } from '../../../types';
 import { SocketEmits, RestEndpoints } from '../../../enums';
+
+import { PAGE_NAMES, PAGE_NAMES_TRANSLATIONS } from '../router';
+import { UserStore } from '../store'
+
+import User from '../components/User';
 
 export default {
   name: 'app-bar',
   components: {
-    Avatar,
-  },
-  sockets: {
-    [SocketEmits.User](user: User) {
-      // @ts-ignore
-      this.user = user;
-    },
-  },
-  data() {
-    return {
-      user: {},
-    };
+    User,
   },
   computed: {
+    user() {
+      return UserStore.user || undefined
+    },
     title() {
       return `${PAGE_NAMES_TRANSLATIONS[this.$route.name]}`;
     },
   },
   methods: {
+    logOut() {
+      UserStore.LogOut();
+    },
     goToMain() {
-      if (this.$route.name === PAGE_NAMES.Main) return;
-
-      this.$router.push({
-        name: PAGE_NAMES.Main,
-      });
+      this.$router.push({ name: PAGE_NAMES.Main });
     },
   },
 };

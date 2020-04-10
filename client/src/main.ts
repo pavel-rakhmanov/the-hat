@@ -1,15 +1,20 @@
 import Vue from 'vue';
 
+import              './plugins/socket.io';
+import              './plugins/composition-api';
+import vuetify from './plugins/vuetify';
+
 import App from './App.vue';
 import router from './router';
-import './plugins/socket.io';
-import vuetify from './plugins/vuetify';
+import store, { UserStore } from './store';
+
+UserStore.tryToRestoreUser();
 
 Vue.config.productionTip = false;
 
 new Vue({
   router,
-  // @ts-ignore
+  store,
   vuetify,
   render: (h) => h(App),
 }).$mount('#app');

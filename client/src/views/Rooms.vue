@@ -1,113 +1,68 @@
 <template>
-  <v-container fluid>
-    <v-data-iterator
-      :items="rooms"
-      :items-per-page.sync="itemsPerPage"
-      :page="page"
-      :search="search"
-      :hide-default-footer="true"
-    >
-      <template v-slot:no-data>
-        no data
-      </template>
-      <template v-slot:no-results>
-        no results
-      </template>
-      <template v-slot:header>
-          <v-toolbar class="mb-3"  >
-            <v-text-field
-              v-model="search"
-              clearable
-              flat solo
-              hide-details
-              prepend-inner-icon="search"
-              label="Search"
+  <div class="flex flex-column">
+    <div class="mb-3 d-flex align-center">
+      <v-text-field
+        v-model="search"
+        clearable
+        flat solo
+        hide-details
+        prepend-inner-icon="search"
+        label="Search"
+      />
+      <v-btn
+        color="primary"
+        class="ml-3"
+        icon
+        @click.stop="addRoom"
+      >
+        <v-icon>add</v-icon>
+      </v-btn>
+    </div>
+
+    <div class="flex flex-column">
+      <v-card
+        v-ripple
+        v-for="(room, roomIndex) in filteredRooms"
+        :key="`room-${roomIndex}`"
+        :elevation="5"
+        :disabled="room.users.length === room.usersLimit"
+        @click.stop="() => { goToRoom(room) }"
+        :class="{ 'mb-3': roomIndex < rooms.length - 1 }"
+      >
+        <v-card-title>
+          <span class="primary--text">
+            {{ room.name }}
+          </span>
+          <v-spacer/>
+          <span class="secondary--text">
+            {{ room.users.length }}/{{ room.usersLimit }}
+          </span>
+        </v-card-title>
+        <v-card-text>
+          <div class="d-flex">
+            <User 
+              v-for="(user, userIndex) in room.users"
+              :key="`room-${roomIndex}-user-${userIndex}`"
+              :user="user"
             />
-            <v-btn
-              color="primary"
-              class="ml-3"
-              text icon
-              @click.stop="addRoom"
-            >
-              <v-icon>add</v-icon>
-            </v-btn>
-            <v-btn
-              class="ml-3"
-              text icon
-              @click.stop="prevPage"
-            >
-              <v-icon>keyboard_arrow_left</v-icon>
-            </v-btn>
-            <span class="body ml-3">
-              {{ paginationText }}
-            </span>
-            <v-btn
-              class="ml-3"
-              text icon
-              @click.stop="nextPage"
-            >
-              <v-icon>keyboard_arrow_right</v-icon>
-            </v-btn>
-          </v-toolbar>
-      </template>
-      <template v-slot:default="props">
-          <v-row>
-            <v-col
-              v-for="(room, roomIndex) in props.items"
-              :key="roomIndex"
-              cols="12"
-              sm="6"
-              md="4"
-              lg="3"
-            >
-              <v-card
-                :elevation="5"
-                v-ripple
-                :disabled="room.users.length === room.usersLimit"
-                @click.stop="() => { goToRoom(room) }"
-                style="height: 100%"
-              >
-                <v-card-title>
-                  <span class="primary--text">
-                    {{ room.name }}
-                  </span>
-                  <v-spacer/>
-                  <span class="secondary--text">
-                    {{ room.users.length }}/{{ room.usersLimit }}
-                  </span>
-                </v-card-title>
-                <v-card-text>
-                  <div
-                    v-for="(user, userIndex) in room.users"
-                    :key="userIndex"
-                    class="flex"
-                    :class="{
-                      'mb-3': userIndex < room.users.length - 1
-                    }"
-                  >
-                    <Avatar :src="user.avatar" />
-                    <span class="ml-3">{{ user.name }} </span>
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
-      </template>
-    </v-data-iterator>
-  </v-container>
+          </div>
+        </v-card-text>
+      </v-card>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { PAGE_NAMES } from '@/router';
-import Avatar from '@/components/Avatar.vue';
-
 import { Room } from '../../../types';
 import { SocketEmits } from '../../../enums';
+
+import { PAGE_NAMES } from '../router';
+import { User } from '../components';
 
 export default {
   name: 'rooms',
   components: {
-    Avatar,
+    User,
   },
   sockets: {
     [SocketEmits.Rooms](rooms: Room[]) {
@@ -122,31 +77,22 @@ export default {
   data() {
     return {
       rooms: [],
-      itemsPerPage: 4,
-      page: 1,
       search: '',
     };
   },
   computed: {
-    paginationText() {
-      const total = this.rooms.length;
-      const from = total ? ((this.page - 1) * this.itemsPerPage) + 1 : 0;
-      const to = this.page * this.itemsPerPage;
+    filteredRooms() {
+      const searchString = this.search.trim().toLowerCase();
 
-      return `${from} - ${Math.min(to, total)} / ${this.rooms.length}`;
+      if (!searchString) return this.rooms;
+
+      return this.rooms.filter(room => [
+          room.id, room.name, ...room.users.map(user => user.name)
+        ].some(fieldForSearch => fieldForSearch.toLowerCase().includes(searchString))
+      )
     }
   },
   methods: {
-    nextPage() {
-      if (this.page * this.itemsPerPage < this.rooms.length) {
-        this.page += 1;
-      }
-    },
-    prevPage() {
-      if (this.page > 1) {
-        this.page -= 1;
-      }
-    },
     addRoom() {
       // TODO: создание комнаты пользователем а не мок
       const room: Room = {

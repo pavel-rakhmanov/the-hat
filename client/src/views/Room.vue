@@ -7,8 +7,8 @@
 </template>
 
 <script lang="ts">
-import { Room, User } from '../../../types';
-import { SocketEmits, SocketNamespace } from '../../../enums';
+import { Room, BaseUser } from '../../../types';
+import { SocketEmits } from '../../../enums';
 
 export default {
   name: 'room',
@@ -18,12 +18,6 @@ export default {
       required: true,
     },
   },
-  // sockets: {
-  //   [SocketEmits.Room](room: Room) {
-  //     // @ts-ignore
-  //     this.room = room;
-  //   },
-  // },
   data() {
     return {
       room: null,

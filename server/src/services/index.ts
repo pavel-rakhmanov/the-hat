@@ -1,2 +1,2 @@
-export * as RoomService from './RoomService';
-export * from './UserService';
+export * as RoomsService from './RoomsService';
+export * as UsersService from './UsersService';

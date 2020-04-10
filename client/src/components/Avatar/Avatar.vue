@@ -1,6 +1,6 @@
 <template>
   <v-avatar
-    size="48"
+    :size="size"
     class="secondary"
     style="border: 2px solid;"
   >
@@ -15,7 +15,14 @@
 export default {
   name: 'avatar',
   props: {
-    src: String,
+    src: {
+      type: String,
+      required: true
+    },
+    size: {
+      type: Number,
+      default: 48
+    }
   },
   computed: {
     imgUrl() {
