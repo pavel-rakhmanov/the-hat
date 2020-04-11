@@ -6,6 +6,7 @@
         <router-view />
       </v-container>
     </v-content>
+    <ErrorsSnackbars/>
     <Footer />
   </v-app>
 </template>
@@ -15,13 +16,14 @@ import { SocketEmits } from '../../enums';
 import { BaseUser } from '../../types';
 
 import { UserStore } from './store';
-import { AppBar, Footer } from './components';
+import { AppBar, Footer, ErrorsSnackbars } from './components';
 
 export default {
   name: 'app',
   components: {
     AppBar,
     Footer,
+    ErrorsSnackbars,
   },
   computed: {
     user() {

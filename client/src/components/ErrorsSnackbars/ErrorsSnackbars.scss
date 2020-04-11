@@ -1,0 +1,27 @@
+.errors {
+  $spacing: 10px;
+
+  display: flex;
+  flex-direction: column-reverse;
+  position: absolute;
+  z-index: 100;
+  right: $spacing;
+  bottom: $spacing;
+
+  & > *:not(:first-child) {
+    margin-bottom: $spacing;
+  }
+
+  &__error {
+    padding: $spacing;
+    min-height: 50px;
+    max-height: 200px;
+    min-width: 300px;
+    max-width: 50vw;
+    overflow: auto;
+
+    &-content {
+      position: relative;
+    }
+  }
+}
