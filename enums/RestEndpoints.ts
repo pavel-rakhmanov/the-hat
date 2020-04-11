@@ -10,7 +10,7 @@ export enum RestEndpoints {
    */
   SignIn = 'sign-in',
   /**
-   * Сохраняет переданное с фронта изображение в папку `public/img/`
+   * Сохраняет переданное с фронта изображение в папку `img/`
    * Возвращает путь изображения относительно base url
    */
   UploadImage = 'upload-image',

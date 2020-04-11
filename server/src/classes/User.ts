@@ -12,7 +12,7 @@ export class User implements BaseUser {
 
     this.id = userId;
     this.name = userInfo.name || `user ${userId}`;
-    this.avatar = userInfo.avatar || 'public/img/default-avatar.png';
+    this.avatar = userInfo.avatar || 'img/default-avatar.png';
   }
 
   public readonly id: NonNullable<BaseUser['id']>;

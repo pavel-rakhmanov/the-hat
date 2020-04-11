@@ -34,7 +34,7 @@ export async function getRandomUser(salt?: string): Promise<BaseUser> {
   const defaultUser: Required<BaseUser> = {
     id,
     name: `user ${id}`,
-    avatar: 'public/img/default-avatar.png',
+    avatar: 'img/default-avatar.png',
   };
 
   try {

@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     logoSrc() {
-      return `${envVariableGetter('VUE_APP_PUBLIC_FILES')}/img/hat.png`;
+      return `${envVariableGetter('VUE_APP_API_URL')}/img/logo.png`;
     },
     user() {
       return UserStore.user || undefined

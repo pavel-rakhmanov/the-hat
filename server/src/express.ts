@@ -18,8 +18,8 @@ export function createApp(): Express {
   app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use('', express.static(CLIENT_BUILD_PATH));
-  app.use('/public', express.static(path.join(__dirname, 'public')));
+  app.use(express.static(CLIENT_BUILD_PATH));
+  app.use(express.static(path.join(__dirname, '../public')));
 
   app.get('/', (req, res) => { res.send(CLIENT_INDEX_PAGE); });
   app.get(`/${RestEndpoints.SignIn}?:userId`, handlers[RestEndpoints.SignIn]);
@@ -66,7 +66,7 @@ const handlers: {[key in RestEndpoints]: RequestHandler } = {
     if (!image) return;
 
     // @ts-ignore
-    const imagePath = `public/img/${image.name}`;
+    const imagePath = `img/${image.name}`;
 
     // @ts-ignore
     photo.mv(path.join(__dirname, imagePath), (err) => {

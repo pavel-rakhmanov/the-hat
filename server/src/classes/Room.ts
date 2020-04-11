@@ -13,7 +13,7 @@ export class Room implements Required<BaseRoom> {
 
     this.id = roomId;
     this.name = roomInfo.name || `room ${roomId}`;
-    this.avatar = roomInfo.avatar || 'public/img/default-avatar.png';
+    this.avatar = roomInfo.avatar || 'img/default-avatar.png';
     this.usersLimit = roomInfo.usersLimit;
     this.password = roomInfo.password || null;
   }

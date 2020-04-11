@@ -1,6 +1,6 @@
 # Description
 
-<img alt="Шапка" src="./server/src/public/img/hat.png" />
+<img alt="Шапка" src="./server/public/img/logo.png" />
 
 # Setup
 
