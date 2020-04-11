@@ -21,15 +21,19 @@ export default {
       required: true,
     },
   },
+  sockets: {
+    [SocketEmits.Room](room: Room) {
+      // @ts-ignore
+      this.room = room
+    },
+  },
   data() {
     return {
       room: null,
     };
   },
   computed: {
-    user () {
-      return UserStore.user;
-    },
+    user () { return UserStore.user; },
   },
   methods: {
     leaveRoom: async function() {
@@ -38,6 +42,9 @@ export default {
         userId: this.user.id
       })
     },
+  },
+  created() {
+    this.$socket.emit(SocketEmits.Room, this.roomId);
   },
   beforeDestroy: async function () {
     await this.leaveRoom();

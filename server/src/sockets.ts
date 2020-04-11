@@ -33,6 +33,18 @@ export function createIo(server: Server): socketIo.Server {
         .emit(SocketEmits.Rooms, RoomsService.getBaseRooms());
     });
 
+    socket.on(SocketEmits.Room, (roomId: Room['id']) => {
+      if (!user?.socket) return;
+
+      const baseRoom = RoomsService.getBaseRoom(roomId);
+
+      if (!baseRoom) return;
+
+      user.socket
+        // TODO: Тут вернуть проверку что пользователь в комнате?
+        .emit(SocketEmits.Room, baseRoom);
+    });
+
     socket.on(SocketEmits.AddRoom, (room: Room) => {
       if (!user?.socket) return;
 

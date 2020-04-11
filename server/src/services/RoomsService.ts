@@ -14,22 +14,22 @@ export function getBaseRooms(): BaseRoom[] {
   return getRooms().map((room) => room.baseRoom);
 }
 
-function updateRoom(room: Room): void {
-  const { id, baseRoom } = room;
-
-  room.backendUsers.forEach((user) => {
-    const { socket } = user;
-
-    if (socket) socket.in(id).emit(SocketEmits.Room, baseRoom);
-  });
-
-  updateRooms();
-}
-
 function updateRooms(): void {
   if (!io) return;
 
-  io.in(SocketNamespace.Rooms).emit(SocketEmits.Rooms, getBaseRooms());
+  io
+    .in(SocketNamespace.Rooms)
+    .emit(SocketEmits.Rooms, getBaseRooms());
+}
+
+function updateRoom(room: Room): void {
+  if (!io) return;
+
+  io
+    .in(room.id)
+    .emit(SocketEmits.Room, room.baseRoom);
+
+  updateRooms();
 }
 
 export function addRoom(roomInfo: BaseRoom): Room {
@@ -75,16 +75,21 @@ export function addRoomUser(roomId: Room['id'], userId: User['id'], roomPassword
       throw new Error(`User with id='${userId}' was not found`);
     }
 
+    if (!user.socket) {
+      throw new Error(`User with id='${userId}' was not connected to the socket`);
+    }
+
     if (room.backendUsers.length >= room.usersLimit) {
       throw new Error(`Maximum user limit reached in room with id='${roomId}'`);
     }
 
+    user.socket.join(roomId);
     room.backendUsers.push(user);
 
     console.log(`User with id='${userId}' enter to the room with id='${roomId}'`);
 
     updateRoom(room);
-  } catch(e) {
+  } catch (e) {
     throw new Error(e);
   }
 }
@@ -97,6 +102,17 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
       throw new Error(`Room with id='${roomId}' was not found`);
     }
 
+    const user = getUser(userId);
+
+    if (!user) {
+      throw new Error(`User with id='${userId}' was not found`);
+    }
+
+    if (!user.socket) {
+      throw new Error(`User with id='${userId}' was not connected to the socket`);
+    }
+
+    user.socket.leave(roomId);
     room.backendUsers = room.backendUsers.filter(user => user.id !== userId);
 
     console.log(`User with id='${userId}' leaving the room with id='${roomId}'`);
