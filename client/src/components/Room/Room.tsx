@@ -18,14 +18,14 @@ export default defineComponent({
   setup: (props, context ) => {
     const h = createElement;
     const { room } = props;
-    const isFull = true; // computed(() => room.users.length >= room.usersLimit );
+    const isFull = computed(() => room.users.length >= room.usersLimit );
 
     function onRoomClick(e: MouseEvent) {
-      e.preventDefault();
+      e.stopPropagation();
 
-      if (!isFull) return;
-
-      context.emit('click', e);
+      if (!isFull.value) {
+        context.emit('click', e);
+      };
     }
 
     return () => (
@@ -47,13 +47,11 @@ export default defineComponent({
         </div>
         <div class="room__body">
           {
-            Boolean(room.users.length) && (
-              <div class="room__users">
-                {
-                  room.users.map(user => <User class="user-list__user" user={user} />)
-                }
-              </div>
-            )
+            <div class="room__users">
+              {
+                (room.users || []).map(user => <User class="user-list__user" user={user} />)
+              }
+            </div>
           }
         </div>
       </div>
