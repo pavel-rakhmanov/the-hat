@@ -5,7 +5,7 @@
         @click="goToMain"
         style="cursor: pointer;"
       >
-        <img src="@/assets/hat.png" class="mr3">
+        <img :src="logoSrc" class="mr3">
         {{ title }}
       </div>
     </v-toolbar-title>
@@ -26,6 +26,7 @@ import { PAGE_NAMES, PAGE_NAMES_TRANSLATIONS } from '../router';
 import { UserStore } from '../store'
 
 import User from '../components/User';
+import { envVariableGetter } from '../utils';
 
 export default {
   name: 'app-bar',
@@ -33,6 +34,9 @@ export default {
     User,
   },
   computed: {
+    logoSrc() {
+      return `${envVariableGetter('VUE_APP_PUBLIC_FILES')}/img/hat.png`;
+    },
     user() {
       return UserStore.user || undefined
     },

@@ -14,4 +14,12 @@ export enum RestEndpoints {
    * Возвращает путь изображения относительно base url
    */
   UploadImage = 'upload-image',
+  /**
+   * Возвращает объект пользователя со случайно заполненными полями
+   */
+  GenerateRandomUser = 'generate-random-user',
+  /**
+   * Возвращает список случайных слов указанной длинны
+   */
+  GenerateRandomWords = 'generate-random-words',
 }
