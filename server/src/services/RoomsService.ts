@@ -109,7 +109,11 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
 
 (function periodicRoomsCleaning(): void {
   setInterval(() => {
-    getRooms()
+    const rooms = getRooms();
+
+    if (rooms.length < 5) return;
+
+    rooms
       .filter((room) => room.users.length === 0)
       .forEach((room) => removeRoom(room.id));
   }, 1000 * 60 * 5);
