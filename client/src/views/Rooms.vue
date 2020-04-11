@@ -30,17 +30,19 @@
         :class="{ 'mb-3': roomIndex < rooms.length - 1 }"
       >
         <v-card-title>
-          <span class="primary--text">
+          <v-icon class="mr-3">
+            {{ room.password ? 'lock' : 'lock_open' }}
+          </v-icon>
+          <span class="secondary--text mr-3">
+            [{{ room.users.length }}/{{ room.usersLimit }}]
+          </span>
+          <span class="primary--text  mr-auto">
             {{ room.name }}
           </span>
-          <v-spacer/>
-          <span class="secondary--text">
-            {{ room.users.length }}/{{ room.usersLimit }}
-          </span>
         </v-card-title>
-        <v-card-text>
-          <div class="d-flex">
-            <User 
+        <v-card-text v-if="room.users.length">
+          <div class="d-flex flex-wrap">
+            <User
               v-for="(user, userIndex) in room.users"
               :key="`room-${roomIndex}-user-${userIndex}`"
               :user="user"
