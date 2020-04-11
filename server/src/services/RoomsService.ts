@@ -2,6 +2,7 @@ import { Room as BaseRoom } from '@/types';
 import { SocketEmits, SocketNamespace } from '@/enums';
 import { Room, User } from '@/classes';
 import { io } from '@/index';
+import { getUser } from './UsersService';
 
 const ROOMS_MAP = new Map<Room['id'], Room>();
 
@@ -56,28 +57,54 @@ export function removeRoom(roomId: Room['id']): void {
   updateRooms();
 }
 
-export function addRoomUser(roomId: Room['id'], user: User): void {
-  const room = getRoom(roomId);
+export function addRoomUser(roomId: Room['id'], userId: User['id'], roomPassword: Room['password'] = null): void {
+  try {
+    const room = getRoom(roomId);
 
-  if (!room) return;
+    if (!room) {
+      throw new Error(`Room with id='${roomId}' was not found`);
+    }
 
-  room.backendUsers.push(user);
+    if (room.password !== roomPassword) {
+      throw new Error(`Incorrect password for room with id='${roomId}'`);
+    }
 
-  console.log(`User with id='${user.id}' enter to the room with id='${roomId}'`);
+    const user = getUser(userId);
 
-  updateRoom(room);
+    if (!user) {
+      throw new Error(`User with id='${userId}' was not found`);
+    }
+
+    if (room.backendUsers.length >= room.usersLimit) {
+      throw new Error(`Maximum user limit reached in room with id='${roomId}'`);
+    }
+
+    room.backendUsers.push(user);
+
+    console.log(`User with id='${userId}' enter to the room with id='${roomId}'`);
+
+    updateRoom(room);
+  } catch(e) {
+    throw new Error(e);
+  }
 }
 
-export function removeRoomUser(roomId: Room['id'], user: User): void {
-  const room = getRoom(roomId);
+export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
+  try {
+    const room = getRoom(roomId);
 
-  if (!room) return;
+    if (!room) {
+      throw new Error(`Room with id='${roomId}' was not found`);
+    }
 
-  room.backendUsers = room.backendUsers.filter(({ id }) => id !== user.id);
+    room.backendUsers = room.backendUsers.filter(user => user.id !== userId);
 
-  console.log(`User with id='${user.id}' leaving the room with id='${roomId}'`);
+    console.log(`User with id='${userId}' leaving the room with id='${roomId}'`);
 
-  updateRoom(room);
+    updateRoom(room);
+  } catch(e) {
+    throw new Error(e);
+  }
 }
 
 (function periodicRoomsCleaning(): void {
@@ -108,7 +135,7 @@ export function removeRoomUser(roomId: Room['id'], user: User): void {
       id: 'r3',
       name: 'Просто комната',
       users: [],
-      usersLimit: 6,
+      usersLimit: 2,
       password: null
     },
   ];

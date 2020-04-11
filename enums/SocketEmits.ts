@@ -11,16 +11,5 @@ export enum SocketEmits {
    * ? ?
    */
   Room = 'Room',
-  /**
-   * ? ?
-   */
-  AddRoom = 'AddRoom',
-  /**
-   * Добавить в namespaces пользователя комнату
-   */
-  EnterRoom = 'EnterRoom',
-  /**
-   * Убрать из namespaces пользователя комнату
-   */
-  LeaveRoom = 'LeaveRoom',
+  AddRoom = 'AddRoom'
 }

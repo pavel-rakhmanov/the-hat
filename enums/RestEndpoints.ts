@@ -22,4 +22,12 @@ export enum RestEndpoints {
    * Возвращает список случайных слов указанной длинны
    */
   GenerateRandomWords = 'generate-random-words',
+  /**
+   * Добавить в namespaces пользователя комнату
+   */
+  EnterRoom = 'enter-room',
+  /**
+   * Убрать из namespaces пользователя комнату
+   */
+  LeaveRoom = 'leave-room',
 }

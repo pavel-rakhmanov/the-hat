@@ -58,8 +58,10 @@
 import { Room } from '../../../types';
 import { SocketEmits } from '../../../enums';
 
+import { API } from '../api'
 import { PAGE_NAMES } from '../router';
 import { User } from '../components';
+import { UserStore } from '../store';
 
 export default {
   name: 'rooms',
@@ -83,6 +85,9 @@ export default {
     };
   },
   computed: {
+    user () {
+      return UserStore.user;
+    },
     filteredRooms() {
       const searchString = this.search.trim().toLowerCase();
 
@@ -99,21 +104,30 @@ export default {
       // TODO: создание комнаты пользователем а не мок
       const room: Room = {
         id: this.rooms.length.toString(),
+        name: 'Mock комната с фронта',
         users: [],
         usersLimit: 4,
+        password: null,
       };
 
       this.$socket.emit(SocketEmits.AddRoom, room);
     },
     goToRoom(room: Room) {
-      setTimeout(() => {
-        this.$router.push({
-          name: PAGE_NAMES.Room,
-          params: {
-            roomId: room.id,
-          },
-        });
-      }, 150)
+      const roomPassword = room.password ? prompt("Room password:", "") : null;
+
+      API
+        .enterRoom({ roomId: room.id, userId:  this.user.id, roomPassword })
+        .then((response) => {
+          this.$router.push({
+            name: PAGE_NAMES.Room,
+            params: {
+              roomId: room.id,
+            },
+          });
+        })
+        .catch((error) => {
+          alert(error)
+        })
     },
   },
   created() {
