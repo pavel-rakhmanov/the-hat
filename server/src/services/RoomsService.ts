@@ -92,22 +92,24 @@ export function removeRoomUser(roomId: Room['id'], user: User): void {
   const defaultRooms: BaseRoom[] = [
     {
       id: 'r1',
-      users: [{
-        id: 'r1u1',
-        name: 'r1 static user',
-        avatar: 'https://randomuser.me/api/portraits/women/69.jpg',
-      }],
+      name: 'Комната с паролем',
+      users: [],
+      password:  'qwerty',
       usersLimit: 4,
     },
     {
       id: 'r2',
+      name: 'Заполненная комната',
       users: [],
       usersLimit: 0,
+      password: null,
     },
     {
       id: 'r3',
+      name: 'Просто комната',
       users: [],
       usersLimit: 6,
+      password: null
     },
   ];
 
