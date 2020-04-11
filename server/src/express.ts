@@ -6,7 +6,9 @@ import cors from 'cors';
 import upload from 'express-fileupload';
 
 import { RestEndpoints } from '@/enums';
-import { UsersService, RandomUserService, RandomWordService, RoomsService } from '@/services';
+import {
+  UsersService, RandomUserService, RandomWordService, RoomsService,
+} from '@/services';
 
 const CLIENT_BUILD_PATH = path.join(__dirname, '../../client/dist');
 const CLIENT_INDEX_PAGE = fs.readFileSync(path.join(CLIENT_BUILD_PATH, 'index.html'), 'utf8');
@@ -146,7 +148,7 @@ const handlers: {[key in RestEndpoints]: RequestHandler } = {
     try {
       RoomsService.removeRoomUser(roomId, userId);
       res.status(200);
-    } catch(e) {
+    } catch (e) {
       res.status(500).send(e);
     }
   },

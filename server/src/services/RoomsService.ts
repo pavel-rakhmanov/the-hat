@@ -83,7 +83,16 @@ export function addRoomUser(roomId: Room['id'], userId: User['id'], roomPassword
       throw new Error(`Maximum user limit reached in room with id='${roomId}'`);
     }
 
+    if (room.backendUsers.some((roomUser) => roomUser.id === user.id)) {
+      throw new Error(`User with id='${userId}' is already in room with id='${roomId}'`);
+    }
+
+    if (user.roomId) {
+      removeRoomUser(user.roomId, user.id);
+    }
+
     user.socket.join(roomId);
+    user.roomId = roomId;
     room.backendUsers.push(user);
 
     console.log(`User with id='${userId}' enter to the room with id='${roomId}'`);
@@ -112,13 +121,17 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
       throw new Error(`User with id='${userId}' was not connected to the socket`);
     }
 
+    if (user.roomId === roomId) {
+      user.roomId = null;
+    }
+
     user.socket.leave(roomId);
-    room.backendUsers = room.backendUsers.filter(user => user.id !== userId);
+    room.backendUsers = room.backendUsers.filter((user) => user.id !== userId);
 
     console.log(`User with id='${userId}' leaving the room with id='${roomId}'`);
 
     updateRoom(room);
-  } catch(e) {
+  } catch (e) {
     throw new Error(e);
   }
 }
@@ -141,7 +154,7 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
       id: 'r1',
       name: 'Комната с паролем',
       users: [],
-      password:  'qwerty',
+      password: 'qwerty',
       usersLimit: 4,
     },
     {
@@ -156,7 +169,7 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
       name: 'Просто комната',
       users: [],
       usersLimit: 2,
-      password: null
+      password: null,
     },
   ];
 

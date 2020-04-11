@@ -1,4 +1,4 @@
-import { BaseUser } from '@/types';
+import { BaseUser, Room } from '@/types';
 import { getUser } from '@/services/UsersService';
 import { uuid } from '@/utils';
 
@@ -22,6 +22,8 @@ export class User implements BaseUser {
   public readonly avatar: NonNullable<BaseUser['avatar']>;
 
   public socket: SocketIO.Socket | null = null;
+
+  public roomId: Room['id'] | null = null;
 
   public get baseUser(): BaseUser {
     return {
