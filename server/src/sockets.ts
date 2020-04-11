@@ -53,7 +53,6 @@ export function createIo(server: Server): socketIo.Server {
 
     socket.on('disconnect', () => {
       if (!user?.socket) return;
-
       user.socket = null;
     });
   });

@@ -83,17 +83,15 @@ export function addRoomUser(roomId: Room['id'], userId: User['id'], roomPassword
       throw new Error(`Maximum user limit reached in room with id='${roomId}'`);
     }
 
-    if (room.backendUsers.some((roomUser) => roomUser.id === user.id)) {
-      throw new Error(`User with id='${userId}' is already in room with id='${roomId}'`);
-    }
-
-    if (user.roomId) {
+    if (user.roomId && user.roomId !== roomId) {
       removeRoomUser(user.roomId, user.id);
     }
 
     user.socket.join(roomId);
     user.roomId = roomId;
-    room.backendUsers.push(user);
+    if (room.backendUsers.every((roomUser) => roomUser.id !== user.id)) {
+      room.backendUsers.push(user);
+    }
 
     console.log(`User with id='${userId}' enter to the room with id='${roomId}'`);
 
