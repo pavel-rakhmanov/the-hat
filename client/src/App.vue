@@ -2,7 +2,7 @@
   <v-app>
     <AppBar />
     <v-content>
-      <v-container fluid style="height: 100%;" class="d-flex">
+      <v-container fluid style="height: 100%;" class="container">
         <router-view />
       </v-container>
     </v-content>
@@ -36,3 +36,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.container {
+  padding: 20px calc(50% - 40vw);
+}
+</style>
