@@ -10,6 +10,9 @@
 import { Room, BaseUser } from '../../../types';
 import { SocketEmits } from '../../../enums';
 
+import { API } from '../api'
+import { UserStore } from '../store';
+
 export default {
   name: 'room',
   props: {
@@ -23,11 +26,21 @@ export default {
       room: null,
     };
   },
-  created() {
-    this.$socket.emit(SocketEmits.EnterRoom, this.roomId);
+  computed: {
+    user () {
+      return UserStore.user;
+    },
   },
-  beforeDestroy() {
-    this.$socket.emit(SocketEmits.LeaveRoom, this.roomId);
+  methods: {
+    leaveRoom: async function() {
+      await API.leaveRoom({
+        roomId: this.roomId,
+        userId: this.user.id
+      })
+    },
+  },
+  beforeDestroy: async function () {
+    await this.leaveRoom();
   },
 };
 </script>

@@ -39,18 +39,6 @@ export function createIo(server: Server): socketIo.Server {
       RoomsService.addRoom(room);
     });
 
-    socket.on(SocketEmits.EnterRoom, (roomId: Room['id']) => {
-      if (!user?.socket) return;
-
-      RoomsService.addRoomUser(roomId, user);
-    });
-
-    socket.on(SocketEmits.LeaveRoom, (roomId: Room['id']) => {
-      if (!user?.socket) return;
-
-      RoomsService.removeRoomUser(roomId, user);
-    });
-
     socket.on('disconnect', () => {
       if (!user?.socket) return;
 

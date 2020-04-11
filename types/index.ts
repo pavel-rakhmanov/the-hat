@@ -17,4 +17,5 @@ export type Team = {
 export type Room = BaseUser & {
   users: BaseUser[];
   usersLimit: number;
+  password: string | null;
 }
