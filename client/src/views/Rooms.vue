@@ -49,10 +49,6 @@ export default {
     [SocketEmits.Rooms](rooms: BaseRoom[]) {
       // @ts-ignore
       this.rooms = rooms
-        // .filter(room => room.usersLimit - room.users.length > 0)
-        .sort(
-          (a, b) => (a.usersLimit - a.users.length) - (b.usersLimit - b.users.length)
-        );
     },
   },
   data() {
