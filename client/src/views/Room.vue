@@ -1,20 +1,37 @@
 <template>
-  <div class="Room">
-    Room {{ roomId }} page
+  <div class="room-view d-flex">
+    <template v-if="!room">
+      <Loader />
+    </template>
 
-    <pre>{{ JSON.stringify(room, null, 2) }}</pre>
+    <template v-else>
+      <v-row>
+        <v-col :sm="12" :md="6">
+          <Room :room="room" />
+        </v-col>
+        <v-col :sm="12" :md="6">
+          <WordsList :words="words" />
+        </v-col>
+      </v-row>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { Room, BaseUser } from '../../../types';
+import { Room as BaseRomm, BaseUser } from '../../../types';
 import { SocketEmits } from '../../../enums';
 
-import { API } from '../api'
+import { API } from '../api';
+import { Room, WordsList, Loader } from '../components';
 import { UserStore } from '../store';
 
 export default {
-  name: 'room',
+  name: 'room-view',
+  components: {
+    Room,
+    WordsList,
+    Loader
+  },
   props: {
     roomId: {
       type: String,
@@ -22,7 +39,7 @@ export default {
     },
   },
   sockets: {
-    [SocketEmits.Room](room: Room) {
+    [SocketEmits.Room](room: BaseRomm) {
       // @ts-ignore
       this.room = room
     },
@@ -30,6 +47,7 @@ export default {
   data() {
     return {
       room: null,
+      words: ['слово 1', 'слово 2', 'слово 3', 'слово 4', 'слово 5'],
     };
   },
   computed: {

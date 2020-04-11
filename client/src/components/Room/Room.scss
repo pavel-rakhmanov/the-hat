@@ -1,0 +1,23 @@
+.room {
+  padding: 12px 12px 0;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    padding-bottom: 12px;
+  }
+
+  &__users  {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > *:not(:last-child) {
+      margin-right: 12px;
+      margin-bottom: 12px;
+    }
+  }
+
+  &__body {
+
+  }
+}

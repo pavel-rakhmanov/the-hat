@@ -20,56 +20,33 @@
     </div>
 
     <div class="flex flex-column">
-      <v-card
-        v-ripple
+      <Room
         v-for="(room, roomIndex) in filteredRooms"
         :key="`room-${roomIndex}`"
-        :elevation="5"
-        :disabled="room.users.length === room.usersLimit"
+        :room="room"
         @click.stop="() => { goToRoom(room) }"
         :class="{ 'mb-3': roomIndex < rooms.length - 1 }"
-      >
-        <v-card-title>
-          <v-icon class="mr-3">
-            {{ room.password ? 'lock' : 'lock_open' }}
-          </v-icon>
-          <span class="secondary--text mr-3">
-            [{{ room.users.length }}/{{ room.usersLimit }}]
-          </span>
-          <span class="primary--text  mr-auto">
-            {{ room.name }}
-          </span>
-        </v-card-title>
-        <v-card-text v-if="room.users.length">
-          <div class="d-flex flex-wrap">
-            <User
-              v-for="(user, userIndex) in room.users"
-              :key="`room-${roomIndex}-user-${userIndex}`"
-              :user="user"
-            />
-          </div>
-        </v-card-text>
-      </v-card>
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Room } from '../../../types';
+import { Room as BaseRoom} from '../../../types';
 import { SocketEmits } from '../../../enums';
 
 import { API } from '../api'
 import { PAGE_NAMES } from '../router';
-import { User } from '../components';
+import { Room } from '../components';
 import { UserStore } from '../store';
 
 export default {
   name: 'rooms',
   components: {
-    User,
+    Room,
   },
   sockets: {
-    [SocketEmits.Rooms](rooms: Room[]) {
+    [SocketEmits.Rooms](rooms: BaseRoom[]) {
       // @ts-ignore
       this.rooms = rooms
         // .filter(room => room.usersLimit - room.users.length > 0)
@@ -102,7 +79,7 @@ export default {
   methods: {
     addRoom() {
       // TODO: создание комнаты пользователем а не мок
-      const room: Room = {
+      const room: BaseRoom = {
         id: this.rooms.length.toString(),
         name: 'Mock комната с фронта',
         users: [],
@@ -112,7 +89,7 @@ export default {
 
       this.$socket.emit(SocketEmits.AddRoom, room);
     },
-    goToRoom(room: Room) {
+    goToRoom(room: BaseRoom) {
       const roomPassword = room.password ? prompt("Room password:", "") : null;
 
       API

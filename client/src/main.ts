@@ -3,6 +3,7 @@ import Vue from 'vue';
 import              './plugins/socket.io';
 import              './plugins/composition-api';
 import vuetify from './plugins/vuetify';
+import              './styles/index.scss';
 
 import App from './App.vue';
 import router from './router';

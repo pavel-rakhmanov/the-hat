@@ -1,5 +1,5 @@
 import { defineComponent, createElement, computed } from '@vue/composition-api';
-import { VIcon } from 'vuetify/lib'
+
 import { ErrorsStore } from '@/store';
 
 import './ErrorsSnackbars.scss';
