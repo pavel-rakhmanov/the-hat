@@ -1,0 +1,19 @@
+.user {
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+    .user__info {
+      visibility: visible;
+    }
+  }
+
+  &__info {
+    visibility: hidden;
+    padding: 12px;
+    position: absolute;
+    z-index: 100;
+    min-width: max-content;
+    transform: translate(-30%, 12px);
+  }
+}

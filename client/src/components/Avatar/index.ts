@@ -1,3 +1,3 @@
-import Avatar from './Avatar.vue';
+import Avatar from './Avatar';
 
 export default Avatar;

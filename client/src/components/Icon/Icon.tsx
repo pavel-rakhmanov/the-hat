@@ -10,10 +10,13 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    title: {
+      type: String,
+    },
   },
   setup: (props) => {
     const h = createElement;
 
-    return () => <i class="icon material-icons">{ props.name }</i>
+    return () => <i class="icon material-icons" title={props.title}>{ props.name }</i>
   }
 });

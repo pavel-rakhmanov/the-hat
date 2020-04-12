@@ -1,3 +1,3 @@
-import User from './User.vue';
+import User from './User';
 
 export default User;
