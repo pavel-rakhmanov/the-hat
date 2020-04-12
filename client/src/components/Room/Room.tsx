@@ -17,13 +17,13 @@ export default defineComponent({
   },
   setup: (props, context ) => {
     const h = createElement;
-    const { room } = props;
-    const isFull = computed(() => room.users.length >= room.usersLimit );
+
+    const room = computed(() => props.room);
 
     function onRoomClick(e: MouseEvent) {
       e.stopPropagation();
 
-      if (!isFull.value) {
+      if (room.value.users.length < room.value.usersLimit) {
         context.emit('click', e);
       };
     }
@@ -36,23 +36,23 @@ export default defineComponent({
         <div class="room__title secondary--text">
           <Icon
             class="mr-3"
-            name={room.password ? 'lock' : 'lock_open'}
+            name={room.value.password ? 'lock' : 'lock_open'}
           />
           <span class="secondary--text mr-3">
-            [{ room.users.length }/{ room.usersLimit }]
+            [{ room.value.users.length }/{ room.value.usersLimit }]
           </span>
           <span class="mr-auto">
-            { room.name }
+            { room.value.name }
           </span>
         </div>
         <div class="room__body">
-          {
-            <div class="room__users">
-              {
-                (room.users || []).map(user => <User class="user-list__user" user={user} />)
-              }
-            </div>
-          }
+          <div class="room__users">
+            {
+              room.value.users.map(user => (
+                <User class="user-list__user" user={user} />
+              ))
+            }
+          </div>
         </div>
       </div>
     )
