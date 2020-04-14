@@ -12,11 +12,10 @@
 </template>
 
 <script lang="ts">
-import { SocketEmits } from '../../enums';
-import { BaseUser } from '../../types';
-
-import { UserStore } from './store';
-import { AppBar, Footer, ErrorsSnackbars } from './components';
+import { SocketEmits } from '@/enums';
+import { BaseUser } from '@/types';
+import { UserStore } from '@/store';
+import { AppBar, Footer, ErrorsSnackbars } from '@/components';
 
 export default {
   name: 'app',

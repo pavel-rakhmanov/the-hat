@@ -1,8 +1,7 @@
-import { defineComponent, createElement, PropType, computed } from '@vue/composition-api';
+import { defineComponent, createElement, PropType } from '@vue/composition-api';
 
-import { BaseUser } from '../../../../types';
-
-import Avatar from '../Avatar';
+import { BaseUser } from '@/types';
+import Avatar from '@/components/Avatar';
 
 import './User.scss';
 

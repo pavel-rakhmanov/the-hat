@@ -18,12 +18,11 @@
 </template>
 
 <script lang="ts">
-import { BaseRoom, BaseUser } from '../../../types';
-import { SocketEmits } from '../../../enums';
-
-import { API } from '../api';
-import { Room, WordsList, Loader } from '../components';
-import { UserStore } from '../store';
+import { BaseRoom, BaseUser } from '@/types';
+import { SocketEmits } from '@/enums';
+import { API } from '@/api';
+import { Room, WordsList, Loader } from '@/components';
+import { UserStore } from '@/store';
 
 export default {
   name: 'room-view',

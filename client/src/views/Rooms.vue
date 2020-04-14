@@ -32,13 +32,12 @@
 </template>
 
 <script lang="ts">
-import { BaseRoom} from '../../../types';
-import { SocketEmits } from '../../../enums';
-
-import { API } from '../api'
-import { PAGE_NAMES } from '../router';
-import { Room } from '../components';
-import { UserStore } from '../store';
+import { BaseRoom} from '@/types';
+import { SocketEmits } from '@/enums';
+import { API } from '@/api'
+import { PAGE_NAMES } from '@/router';
+import { Room } from '@/components';
+import { UserStore } from '@/store';
 
 export default {
   name: 'rooms',
