@@ -32,6 +32,8 @@ export function createApp(): Express {
   app.post(`/${RestEndpoints.UploadImage}`, handlers[RestEndpoints.UploadImage]);
   app.post(`/${RestEndpoints.EnterRoom}`, handlers[RestEndpoints.EnterRoom]);
   app.post(`/${RestEndpoints.LeaveRoom}`, handlers[RestEndpoints.LeaveRoom]);
+  app.post(`/${RestEndpoints.MarkUserAsReady}`, handlers[RestEndpoints.MarkUserAsReady]);
+  app.post(`/${RestEndpoints.UnmarkUserAsReady}`, handlers[RestEndpoints.UnmarkUserAsReady]);
 
   return app;
 }
@@ -147,9 +149,57 @@ const handlers: {[key in RestEndpoints]: RequestHandler } = {
 
     try {
       RoomsService.removeRoomUser(roomId, userId);
-      res.status(200);
+      res.status(200).send();
     } catch (e) {
       res.status(500).send(e);
     }
   },
+  [RestEndpoints.MarkUserAsReady]: (req, res) => {
+    const { body } = req;
+
+    if (!body.userId && typeof body.userId !== 'string') {
+      res.status(400).send('Correct \'userId\' body param was not passed');
+      return;
+    }
+
+    const userId = body.userId as string;
+
+    if (!body.roomId && typeof body.roomId !== 'string') {
+      res.status(400).send('Correct \'roomId\' body param was not passed');
+      return;
+    }
+
+    const roomId = body.roomId as string;
+
+    try {
+      RoomsService.markUserAsReady(roomId, userId);
+      res.status(200).send();
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  },
+  [RestEndpoints.UnmarkUserAsReady]: (req, res) => {
+    const { body } = req;
+
+    if (!body.userId && typeof body.userId !== 'string') {
+      res.status(400).send('Correct \'userId\' body param was not passed');
+      return;
+    }
+
+    const userId = body.userId as string;
+
+    if (!body.roomId && typeof body.roomId !== 'string') {
+      res.status(400).send('Correct \'roomId\' body param was not passed');
+      return;
+    }
+
+    const roomId = body.roomId as string;
+
+    try {
+      RoomsService.unmarkUserAsReady(roomId, userId);
+      res.status(200).send();
+    } catch (e) {
+      res.status(500).send(e);
+    }
+  }
 };

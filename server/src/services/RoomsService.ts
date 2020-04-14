@@ -134,6 +134,60 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
   }
 }
 
+export function markUserAsReady(roomId: Room['id'], userId: User['id']): void {
+  const user = getUser(userId);
+
+  if (!user) {
+    throw new Error(`User with id='${userId}' was not found`);
+  }
+
+  if (!user.socket) {
+    throw new Error(`User with id='${userId}' was not connected to the socket`);
+  }
+
+  if (user.roomId !== roomId) {
+    throw new Error(`User with id='${userId}' has different 'roomId' value`);
+  }
+
+  const room = getRoom(roomId);
+
+  if (!room) {
+    throw new Error(`Room with id='${roomId}' was not found`);
+  }
+
+  if (room.readyUsersIds.includes(userId)) return;
+
+  room.readyUsersIds.push(userId);
+
+  updateRoom(room);
+}
+
+export function unmarkUserAsReady(roomId: Room['id'], userId: User['id']): void {
+  const user = getUser(userId);
+
+  if (!user) {
+    throw new Error(`User with id='${userId}' was not found`);
+  }
+
+  if (!user.socket) {
+    throw new Error(`User with id='${userId}' was not connected to the socket`);
+  }
+
+  if (user.roomId !== roomId) {
+    throw new Error(`User with id='${userId}' has different 'roomId' value`);
+  }
+
+  const room = getRoom(roomId);
+
+  if (!room) {
+    throw new Error(`Room with id='${roomId}' was not found`);
+  }
+
+  room.readyUsersIds = room.readyUsersIds.filter(id => id !== userId);
+
+  updateRoom(room);
+}
+
 (function periodicRoomsCleaning(): void {
   setInterval(() => {
     const rooms = getRooms();
@@ -153,12 +207,14 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
       name: 'Комната с паролем',
       users: [],
       password: 'qwerty',
+      readyUsersIds: [],
       usersLimit: 4,
     },
     {
       id: 'r2',
       name: 'Заполненная комната',
       users: [],
+      readyUsersIds: [],
       usersLimit: 0,
       password: null,
     },
@@ -166,6 +222,7 @@ export function removeRoomUser(roomId: Room['id'], userId: User['id']): void {
       id: 'r3',
       name: 'Просто комната',
       users: [],
+      readyUsersIds: [],
       usersLimit: 2,
       password: null,
     },

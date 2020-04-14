@@ -9,19 +9,22 @@ export type BaseUser = {
 
 export type BaseRoom = BaseUser & {
   users: BaseUser[];
+  readyUsersIds: BaseUser['id'][];
   usersLimit: number;
   password: string | null;
 }
 
-export type Game = {
-  id: Id;
-}
+// export type Game = {
+//   id: Id;
+//   players: BaseUser[];
+//   words: Word[];
+//   timer: number | null;
+// }
 
-export type Team = {
-  lastAskingUser: BaseUser;
-  userA: BaseUser;
-  userAGuessedWords: Word[];
-  userB: BaseUser;
-  userBGuessedWords: Word[];
-}
-
+// export type Team = {
+//   lastAskingUser: BaseUser;
+//   userA: BaseUser;
+//   userAGuessedWords: Word[];
+//   userB: BaseUser;
+//   userBGuessedWords: Word[];
+// }

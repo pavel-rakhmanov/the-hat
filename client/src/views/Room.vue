@@ -11,6 +11,14 @@
         </v-col>
         <v-col :sm="12" :md="6">
           <WordsList :words="words" />
+
+          <v-btn
+            class="mt-3 block primary"
+            @click="toggleReady"
+            :disabled="!isEnoughWords"
+          >
+            {{ isUserReady ? "I'm ready" : "Not ready yet" }}
+          </v-btn>
         </v-col>
       </v-row>
     </template>
@@ -51,6 +59,9 @@ export default {
   },
   computed: {
     user () { return UserStore.user; },
+    isUserReady () { return (this.room?.readyUsersIds || []).includes(this.user?.id) },
+    // TODO: min/max words per game
+    isEnoughWords () { return this.words.length > 0}
   },
   methods: {
     leaveRoom: async function() {
@@ -59,6 +70,17 @@ export default {
         userId: this.user.id
       })
     },
+    toggleReady: async function() {
+      this.isUserReady
+        ? await API.unmarkUserAsReady({
+            roomId: this.roomId,
+            userId: this.user.id
+          })
+        : await API.markUserAsReady({
+            roomId: this.roomId,
+            userId: this.user.id
+          })
+    }
   },
   created() {
     this.$socket.emit(SocketEmits.Room, this.roomId);

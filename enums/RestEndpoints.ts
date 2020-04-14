@@ -30,4 +30,12 @@ export enum RestEndpoints {
    * Убрать из namespaces пользователя комнату
    */
   LeaveRoom = 'leave-room',
+  /**
+   *
+   */
+  MarkUserAsReady = 'mark-user-as-ready',
+  /**
+   *
+   */
+  UnmarkUserAsReady = 'unmark-user-as-ready',
 }

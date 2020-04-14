@@ -39,10 +39,13 @@ export class Room implements Required<BaseRoom> {
       avatar: this.avatar,
       users: this.users,
       usersLimit: this.usersLimit,
+      readyUsersIds: this.readyUsersIds,
       // на фронт не отдаем реальный пароль
       password: this.password ? uuid() : null,
     };
   }
+
+  public readyUsersIds: BaseRoom['readyUsersIds'] = [];
 
   public backendUsers: User[] = [];
 }
