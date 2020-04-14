@@ -1,10 +1,21 @@
+type Id = string;
+type Word = string
+
 export type BaseUser = {
-  id: string;
+  id: Id;
   name?: string;
   avatar?: string;
 }
 
-export type Word = string
+export type BaseRoom = BaseUser & {
+  users: BaseUser[];
+  usersLimit: number;
+  password: string | null;
+}
+
+export type Game = {
+  id: Id;
+}
 
 export type Team = {
   lastAskingUser: BaseUser;
@@ -14,8 +25,3 @@ export type Team = {
   userBGuessedWords: Word[];
 }
 
-export type Room = BaseUser & {
-  users: BaseUser[];
-  usersLimit: number;
-  password: string | null;
-}

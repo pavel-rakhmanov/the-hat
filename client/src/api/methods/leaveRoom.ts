@@ -1,4 +1,4 @@
-import { BaseUser, Room as BaseRoom,  } from '../../../../types';
+import { BaseUser, BaseRoom,  } from '../../../../types';
 import { RestEndpoints } from '../../../../enums';
 
 import { client } from '@/api/client';

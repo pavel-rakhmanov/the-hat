@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Room as BaseRomm, BaseUser } from '../../../types';
+import { BaseRoom, BaseUser } from '../../../types';
 import { SocketEmits } from '../../../enums';
 
 import { API } from '../api';
@@ -39,7 +39,7 @@ export default {
     },
   },
   sockets: {
-    [SocketEmits.Room](room: BaseRomm) {
+    [SocketEmits.Room](room: BaseRoom) {
       // @ts-ignore
       this.room = room
     },

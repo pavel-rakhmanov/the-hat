@@ -1,4 +1,4 @@
-import { BaseUser, Room } from '@/types';
+import { BaseUser, BaseRoom } from '@/types';
 import { getUser } from '@/services/UsersService';
 import { uuid } from '@/utils';
 
@@ -23,7 +23,7 @@ export class User implements BaseUser {
 
   public socket: SocketIO.Socket | null = null;
 
-  public roomId: Room['id'] | null = null;
+  public roomId: BaseRoom['id'] | null = null;
 
   public get baseUser(): BaseUser {
     return {

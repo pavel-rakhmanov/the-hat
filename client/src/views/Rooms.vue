@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { Room as BaseRoom} from '../../../types';
+import { BaseRoom} from '../../../types';
 import { SocketEmits } from '../../../enums';
 
 import { API } from '../api'

@@ -1,6 +1,6 @@
 import { defineComponent, createElement, PropType, computed } from '@vue/composition-api';
 
-import { Room as BaseRoom } from '../../../../types';
+import { BaseRoom } from '../../../../types';
 
 import User from '../User';
 import Icon from '../Icon';

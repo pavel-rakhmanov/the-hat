@@ -1,4 +1,4 @@
-import { Room as BaseRoom } from '@/types';
+import { BaseRoom } from '@/types';
 import { User } from '@/classes';
 import { getRoom } from '@/services/RoomsService';
 import { uuidShort, uuid } from '@/utils';

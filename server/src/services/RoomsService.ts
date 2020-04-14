@@ -1,4 +1,4 @@
-import { Room as BaseRoom } from '@/types';
+import { BaseRoom } from '@/types';
 import { SocketEmits, SocketNamespace } from '@/enums';
 import { Room, User } from '@/classes';
 import { io } from '@/index';

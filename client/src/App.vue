@@ -31,7 +31,7 @@ export default {
     }
   },
   watch: {
-    user(newUser) {
+    user(newUser?: BaseUser) {
       const userId = newUser?.id;
       userId && this.$socket.emit(SocketEmits.BindUserId, userId);
     }
