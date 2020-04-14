@@ -32,7 +32,6 @@
     "typescript": "^3.8.3"
   },
   "_moduleAliases": {
-    "@": "./src",
-    "@root": ".."
+    "@": "./src"
   }
 }

@@ -1,1 +1,1 @@
-export * from '@root/enums';
+export * from '../../../enums';
