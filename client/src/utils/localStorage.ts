@@ -1,3 +1,5 @@
+//@ts-ignore
+
 /**
  * This key base will be automatically added to
  * all our data keys for better localStorage organization
