@@ -50,6 +50,7 @@
           <WordsList
             class="mb-6"
             :words="words"
+            @change="(newWors) => { words = newWors }"
           />
 
           <v-btn
