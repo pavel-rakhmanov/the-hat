@@ -6,14 +6,54 @@
 
     <template v-else>
       <v-row>
-        <v-col :sm="12" :md="6">
-          <Room :room="room" />
+        <v-col
+          class="pt-0"
+          :sm="12" :md="6"
+        >
+          <Room
+            :room="{...room, users: [] }"
+            class="mb-6"
+          />
+
+          <div class="mb-6 pa-3 pb-0 shadow">
+            <p class="ma-0 mb-3">
+              Ready users:
+            </p>
+            <div class="d-flex flex-wrap" >
+              <User
+                v-for="(user, userIndex) in room.users.filter(user => !room.readyUsersIds.includes(user.id))"
+                :key="`user-ready-${userIndex}`"
+                :user="user"
+                class="mb-3 mr-3"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 pa-3 pb-0 shadow">
+            <p class="ma-0 mb-3">
+              Not ready users:
+            </p>
+            <div class="d-flex flex-wrap" >
+              <User
+                v-for="(user, userIndex) in room.users.filter(user => room.readyUsersIds.includes(user.id))"
+                :key="`user-not-ready-${userIndex}`"
+                :user="user"
+                class="mb-3 mr-3"
+              />
+            </div>
+          </div>
         </v-col>
-        <v-col :sm="12" :md="6">
-          <WordsList :words="words" />
+        <v-col
+          class="pt-0"
+          :sm="12" :md="6"
+        >
+          <WordsList
+            class="mb-6"
+            :words="words"
+          />
 
           <v-btn
-            class="mt-3 block primary"
+            class="block primary"
             @click="toggleReady"
             :disabled="!isEnoughWords"
           >
@@ -29,7 +69,7 @@
 import { BaseRoom, BaseUser } from '@/types';
 import { SocketEmits } from '@/enums';
 import { API } from '@/api';
-import { Room, WordsList, Loader } from '@/components';
+import { Room, WordsList, Loader, User } from '@/components';
 import { UserStore } from '@/store';
 
 export default {
@@ -37,7 +77,8 @@ export default {
   components: {
     Room,
     WordsList,
-    Loader
+    Loader,
+    User
   },
   props: {
     roomId: {
