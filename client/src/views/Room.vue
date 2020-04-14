@@ -21,7 +21,7 @@
             </p>
             <div class="d-flex flex-wrap" >
               <User
-                v-for="(user, userIndex) in room.users.filter(user => !room.readyUsersIds.includes(user.id))"
+                v-for="(user, userIndex) in room.users.filter(user => room.readyUsersIds.includes(user.id))"
                 :key="`user-ready-${userIndex}`"
                 :user="user"
                 class="mb-3 mr-3"
@@ -35,7 +35,7 @@
             </p>
             <div class="d-flex flex-wrap" >
               <User
-                v-for="(user, userIndex) in room.users.filter(user => room.readyUsersIds.includes(user.id))"
+                v-for="(user, userIndex) in room.users.filter(user => !room.readyUsersIds.includes(user.id))"
                 :key="`user-not-ready-${userIndex}`"
                 :user="user"
                 class="mb-3 mr-3"
@@ -57,7 +57,7 @@
             @click="toggleReady"
             :disabled="!isEnoughWords"
           >
-            {{ isUserReady ? "I'm ready" : "Not ready yet" }}
+            {{ isUserReady ? "Not ready yet" : "I'm ready" }}
           </v-btn>
         </v-col>
       </v-row>
